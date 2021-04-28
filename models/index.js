@@ -22,7 +22,7 @@ User.hasMany(Post, {
 
   //query a User, we can see all of the posts they've voted on.
   Post.belongsToMany(User, {
-    through: Votes, 
+    through: Vote, 
     as: 'voted_posts',
     foreignKey: 'post_id'
   }); 
