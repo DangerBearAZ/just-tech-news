@@ -1,4 +1,4 @@
-// start at 14.3.3 Now that the single-post page works, let's expand the layout to include the *not working
+// start at 14.3.8 post not working go over span shot start at bottom 
 const path = require('path');
 const express = require('express');
 const session = require('express-session');

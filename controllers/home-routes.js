@@ -1,8 +1,7 @@
-const router = require('express').Router(); 
+const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { Post, User, Comment, Vote } = require('../models');
 
-  
 // get all posts for homepage
 router.get('/', (req, res) => {
   console.log('======================');
@@ -32,7 +31,10 @@ router.get('/', (req, res) => {
     .then(dbPostData => {
       const posts = dbPostData.map(post => post.get({ plain: true }));
 
-      res.render('homepage', { posts });
+      res.render('homepage', {
+        posts,
+        loggedIn: req.session.loggedIn
+      });
     })
     .catch(err => {
       console.log(err);
@@ -40,34 +42,8 @@ router.get('/', (req, res) => {
     });
 });
 
-
-
-/// loged in 
-router.get('/login', (req, res) => {
-  // checking for session redirect if is one
-  if (req.session.loggedIn) {
-    res.redirect('/');
-    return;
-  }
-
-  res.render('login');
-});
- 
-/// get a single post 
-router.get('/post/:id', (req,res) => {
-  // sending test data is a good way to test a get so there are no errors 
-  // const post = {
-  //   id: 1, 
-  //   post_url: 'https://handlebarsjs.com/guide/',
-  //   title: 'Handlebars Docs',
-  //   created_at: new Date(),
-  //   vote_count: 10,
-  //   comments: [{}, {}],
-  //   user: {
-  //     username: 'test_user'
-  //   }
-  // };
-
+// get single post
+router.get('/post/:id', (req, res) => {
   Post.findOne({
     where: {
       id: req.params.id
@@ -100,11 +76,12 @@ router.get('/post/:id', (req,res) => {
         return;
       }
 
-      // serialize the data
       const post = dbPostData.get({ plain: true });
 
-      // pass data to template
-      res.render('single-post', { post });
+      res.render('single-post', {
+        post,
+        loggedIn: req.session.loggedIn
+      });
     })
     .catch(err => {
       console.log(err);
@@ -112,8 +89,13 @@ router.get('/post/:id', (req,res) => {
     });
 });
 
+router.get('/login', (req, res) => {
+  if (req.session.loggedIn) {
+    res.redirect('/');
+    return;
+  }
 
+  res.render('login');
+});
 
 module.exports = router;
-
-

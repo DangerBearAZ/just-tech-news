@@ -7,6 +7,32 @@
         {{post.vote_count}} point(s) by {{post.user.name}} on
         {{post.created_at}}
         |
-        <a href="/models/post.js"> {{post.comments.length}} comment(s)</a>
+         <a href="/post/{{post.id}}">{{post.comments.length}} comment(s)</a>
     </div>
 </article>
+
+{{#if loggedIn}}
+<form class="comment-form">
+    <div>
+        <textarea name="comment-body"></textarea>
+    </div>
+    <div>
+        <button type="submit"> add comment</button>
+        <button type="button" class="upvote-btn">upvote</button>
+    </div>
+</form>
+{{/if}}
+
+<div class="comments">
+    {{#each post.comments}}
+    <section class= "comment">
+        <div class="metta">
+            {{user.username}} on {{created_at}}
+        </div>
+    </section>
+    {{/each}}
+</div>
+{{if loggedIn}}
+<script src="/public/javacript/comment.js"></script>
+<script src="/public/javacript/upvote.js"></script>
+{{/if}}
